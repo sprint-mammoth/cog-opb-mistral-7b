@@ -29,7 +29,10 @@ build:
   run:
     - pip install auto-gptq --extra-index-url https://huggingface.github.io/autogptq-index/whl/cu118/
     - mkdir openbuddy
-    - HF_HUB_ENABLE_HF_TRANSFER=1 huggingface-cli download TheBloke/openbuddy-mistral-7B-v13-GPTQ --local-dir openbuddy --local-dir-use-symlinks False
+    - ls -l
+    - export HF_HUB_ENABLE_HF_TRANSFER=1
+    - echo $HF_HUB_ENABLE_HF_TRANSFER
+    - huggingface-cli download TheBloke/openbuddy-mistral-7B-v13-GPTQ --local-dir openbuddy --local-dir-use-symlinks False
     # - CUDA_HOME=/usr/local/cuda pip install git+https://github.com/vllm-project/vllm.git@main
 
 # predict.py defines how predictions are run on your model
