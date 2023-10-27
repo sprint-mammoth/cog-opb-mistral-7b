@@ -110,8 +110,8 @@ class Predictor(BasePredictor):
         ),
     ) -> ConcatenateIterator:
         # Initialize prompt and generation config
-        prompt = prompt_template.format(prompt=prompt)
-        print(f"Your formatted prompt is: \n{prompt}")
+        instruct_prompt = prompt_template.format(prompt=prompt)
+        print(f"Your formatted prompt is: \n{instruct_prompt}")
 
         if stop_sequences:
             stop_sequences = stop_sequences.split(",")
@@ -142,7 +142,7 @@ class Predictor(BasePredictor):
         # generation_config.save_pretrained("openbuddy", "user_generation_config.json") # generate config could be personalized and saved
         n_tokens = 0
         start = time.time()
-        model_inputs = self.tokenizer([prompt_template], padding=True, return_tensors="pt").to("cuda")
+        model_inputs = self.tokenizer([instruct_prompt], padding=True, return_tensors="pt").to("cuda")
 
         # Run the generation in a separate thread, so that we can fetch the generated text in a non-blocking way.
         generation_kwargs = dict(model_inputs, streamer=self.text_streamer, generation_config=generation_config)
