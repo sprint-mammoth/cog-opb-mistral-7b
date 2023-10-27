@@ -160,3 +160,13 @@ cython_debug/
 #.idea/
 
 qrcode_generation/weights-cache/
+
+
+# Apple MacOS
+.DS_Store
+
+# Jupyter notebook
+.ipynb_checkpoints
+
+# vs code
+.vscode
