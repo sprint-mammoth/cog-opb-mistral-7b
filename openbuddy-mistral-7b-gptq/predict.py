@@ -10,6 +10,8 @@ from threading import Thread
 
 
 MODEL_ID = "TheBloke/openbuddy-mistral-7B-v13-GPTQ"
+CACHE_DIR = "openbuddy"
+
 PROMPT_TEMPLATE = '''You are a helpful high school Math tutor. If you don't know the answer to a question, please don't share false information. You can speak fluently in many languages.
 User: Hi
 Assistant: Hello, how can I help you?</s>
@@ -36,14 +38,14 @@ class Predictor(BasePredictor):
         self.lm_model = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=MODEL_ID,
             device_map="auto",
-            cache_dir="../openbuddy/",
+            cache_dir="openbuddy",
             trust_remote_code=False,
             revision="main"
         )
         self.tokenizer = AutoTokenizer.from_pretrained(
             pretrained_model_name_or_path=MODEL_ID,
             use_fast=True, 
-            cache_dir="../openbuddy/"
+            cache_dir="openbuddy"
         )
         self.text_streamer = TextIteratorStreamer(self.tokenizer, skip_prompt=True, Timeout=5, skip_special_tokens=True)
 

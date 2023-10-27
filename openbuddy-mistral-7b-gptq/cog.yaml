@@ -3,8 +3,8 @@
 
 build:
   # set to true if your model requires a GPU
+  cuda: "11.7"
   gpu: true
-  cuda: "11.8"
 
   # a list of ubuntu apt packages to install
   # system_packages:
@@ -27,12 +27,7 @@ build:
   
   # commands run after the environment is setup
   run:
-    - pip install auto-gptq --extra-index-url https://huggingface.github.io/autogptq-index/whl/cu118/
-    - mkdir openbuddy
-    - ls -l
-    - export HF_HUB_ENABLE_HF_TRANSFER=1
-    - echo $HF_HUB_ENABLE_HF_TRANSFER
-    - huggingface-cli download TheBloke/openbuddy-mistral-7B-v13-GPTQ --local-dir openbuddy --local-dir-use-symlinks False
+    - pip install auto-gptq --extra-index-url https://huggingface.github.io/autogptq-index/whl/cu117/
     # - CUDA_HOME=/usr/local/cuda pip install git+https://github.com/vllm-project/vllm.git@main
 
 # predict.py defines how predictions are run on your model

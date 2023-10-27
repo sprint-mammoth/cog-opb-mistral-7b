@@ -3,7 +3,6 @@
 import os
 import shutil
 import subprocess
-from transformers import AutoTokenizer, AutoModelForCausalLM
 
 CACHE_DIR = "openbuddy"
 MODEL_ID = "TheBloke/openbuddy-mistral-7B-v13-GPTQ"
