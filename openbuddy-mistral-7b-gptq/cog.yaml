@@ -3,7 +3,7 @@
 
 build:
   # set to true if your model requires a GPU
-  # cuda: "11.7"
+  cuda: "11.7"
   gpu: true
 
   # a list of ubuntu apt packages to install
@@ -17,11 +17,12 @@ build:
   # a list of packages in the format <package-name>==<version>
   # Requires: Transformers 4.33.0 or later, Optimum 1.12.0 or later, and AutoGPTQ 0.4.2 or later.
   python_packages:
-    - torch
+    - torch==2.0.1
+    # - torchvision==0.15.2
     - transformers
-    - accelerate 
-    - optimum 
-    - safetensors 
+    - accelerate
+    - optimum
+    - safetensors
     - huggingface-hub 
     - hf-transfer
   
