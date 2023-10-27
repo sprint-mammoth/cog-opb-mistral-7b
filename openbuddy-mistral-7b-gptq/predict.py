@@ -34,16 +34,16 @@ class Predictor(BasePredictor):
         # To use a different branch, change revision
         # For example: revision="gptq-4bit-32g-actorder_True"
         self.lm_model = AutoModelForCausalLM.from_pretrained(
-            pretrained_model_name_or_path="/root/openbuddy/",
+            pretrained_model_name_or_path=MODEL_ID,
             device_map="auto",
-            # cache_dir="/root/openbuddy/",
+            cache_dir="../openbuddy/",
             trust_remote_code=False,
             revision="main"
         )
         self.tokenizer = AutoTokenizer.from_pretrained(
-            pretrained_model_name_or_path="/root/openbuddy/",
+            pretrained_model_name_or_path=MODEL_ID,
             use_fast=True, 
-            #cache_dir="/root/openbuddy/"
+            cache_dir="../openbuddy/"
         )
         self.text_streamer = TextIteratorStreamer(self.tokenizer, skip_prompt=True, Timeout=5, skip_special_tokens=True)
 
