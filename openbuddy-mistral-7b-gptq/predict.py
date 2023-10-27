@@ -35,19 +35,22 @@ class Predictor(BasePredictor):
         # model_name_or_path = "TheBloke/openbuddy-mistral-7B-v13-GPTQ"
         # To use a different branch, change revision
         # For example: revision="gptq-4bit-32g-actorder_True"
-        self.lm_model = AutoModelForCausalLM.from_pretrained(
-            pretrained_model_name_or_path=MODEL_ID,
-            device_map="auto",
-            cache_dir="openbuddy",
-            trust_remote_code=False,
-            revision="main"
-        )
         self.tokenizer = AutoTokenizer.from_pretrained(
-            pretrained_model_name_or_path=MODEL_ID,
+            pretrained_model_name_or_path="openbuddy",
             use_fast=True, 
             cache_dir="openbuddy"
         )
+        print("tokenizer loaded")
+        self.lm_model = AutoModelForCausalLM.from_pretrained(
+            pretrained_model_name_or_path="openbuddy",
+            device_map="auto",
+            #cache_dir="openbuddy",
+            trust_remote_code=False,
+            revision="main"
+        )
+        print("model loaded")
         self.text_streamer = TextIteratorStreamer(self.tokenizer, skip_prompt=True, Timeout=5, skip_special_tokens=True)
+        print("text streamer loaded")
 
     def predict(
         self,
