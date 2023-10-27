@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import shutil
+from transformers import AutoTokenizer, AutoModelForCausalLM
+
+CACHE_DIR = "openbuddy"
+MODEL_ID = "TheBloke/openbuddy-mistral-7B-v13-GPTQ"
+
+if os.path.exists(CACHE_DIR):
+    shutil.rmtree(CACHE_DIR)
+
+os.makedirs(CACHE_DIR)
+
+tokenizer = AutoTokenizer.from_pretrained(
+    MODEL_ID, cache_dir=CACHE_DIR
+)
+model = AutoModelForCausalLM.from_pretrained(
+    MODEL_ID, cache_dir=CACHE_DIR
+)
