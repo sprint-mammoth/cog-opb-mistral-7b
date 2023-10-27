@@ -3,7 +3,7 @@
 
 build:
   # set to true if your model requires a GPU
-  cuda: "11.7"
+  # cuda: "11.7"
   gpu: true
 
   # a list of ubuntu apt packages to install
