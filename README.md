@@ -1,3 +1,3 @@
-# Replicate Examples
+# Replicate Cog Implementation
 
-Playing around with `cog` to build apps on [Replicate](https://replicate.com).
+1. Cog deployment for openbuddy-mistral-7b-GPTQ. Appreciate TheBloke, Openbuddy and Mistral
