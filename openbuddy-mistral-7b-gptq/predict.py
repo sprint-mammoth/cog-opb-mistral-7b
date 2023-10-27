@@ -45,6 +45,8 @@ class Predictor(BasePredictor):
         prompt: str,
         max_new_tokens: int = Input(
             description="The maximum number of tokens the model should generate as output.",
+            ge=1,
+            le=3500,
             default=DEFAULT_MAX_NEW_TOKENS,
         ),
         temperature: float = Input(
@@ -52,10 +54,14 @@ class Predictor(BasePredictor):
         ),
         top_p: float = Input(
             description="A probability threshold for generating the output. If < 1.0, only keep the top tokens with cumulative probability >= top_p (nucleus filtering). Nucleus filtering is described in Holtzman et al. (http://arxiv.org/abs/1904.09751).",
+            ge=0.01,
+            le=1.0,
             default=DEFAULT_TOP_P,
         ),
         top_k: int = Input(
             description="The number of highest probability tokens to consider for generating the output. If > 0, only keep the top k tokens with highest probability (top-k filtering).",
+            ge=1,
+            le=100,
             default=DEFAULT_TOP_K,
         ),
         do_sample: bool = Input(
@@ -64,18 +70,14 @@ class Predictor(BasePredictor):
         ),
         num_beams: int = Input(
             description="Number of beams for beam search. 1 means no beam search.",
+            ge=1,
+            le=10,
             default=DEFAULT_NUM_BEAMS,
         ),
-        presence_penalty: float = Input(
-            description="Presence penalty",
-            default=DEFAULT_PRESENCE_PENALTY,
-        ),
-        frequency_penalty: float = Input(
-            description="Frequency penalty",
-            default=DEFAULT_FREQUENCY_PENALTY,
-        ),
         repetition_penalty: float = Input(
-            description="Repetition penalty, (float, *optional*, defaults to 1.0): The parameter for repetition penalty. 1.0 means no penalty.",
+            description="Repetition penalty, (float, *optional*, defaults to 1.0): The parameter for repetition penalty. 1.0 means no penalty. values greater than 1 discourage repetition, less than 1 encourage it. See [this paper](https://arxiv.org/pdf/1909.05858.pdf) for more details.",
+            ge=0.01,
+            le=5,
             default=DEFAULT_REPETITION_PENALTY,
         ),
         prompt_template: str = Input(
