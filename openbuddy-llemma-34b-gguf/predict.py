@@ -28,9 +28,9 @@ DEFAULT_DO_SAMPLE = True
 DEFAULT_NUM_BEAMS = 1
 DEFAULT_TOP_P = 0.95
 DEFAULT_TOP_K = 40
-DEFAULT_PRESENCE_PENALTY = 1.1  # 1.15
-DEFAULT_FREQUENCY_PENALTY = 0.2  # 0.2
-DEFAULT_REPETITION_PENALTY = 1.0  # 1.0
+DEFAULT_PRESENCE_PENALTY = 0.0
+DEFAULT_FREQUENCY_PENALTY = 0.0
+DEFAULT_REPETITION_PENALTY = 1.1  # 1.0
 
 
 class Predictor(BasePredictor):
@@ -82,11 +82,11 @@ class Predictor(BasePredictor):
             default=DEFAULT_REPETITION_PENALTY,
         ),
         presence_penalty: float = Input(
-            description="Presence penalty, ",
+            description="Repeat alpha presence penalty (default: 0.0, 0.0 = disabled).",
             default=DEFAULT_PRESENCE_PENALTY,
         ),
         frequency_penalty: float = Input(
-            description="Frequency penalty",
+            description="Repeat alpha frequency penalty (default: 0.0, 0.0 = disabled)",
             default=DEFAULT_FREQUENCY_PENALTY,
         ),
         prompt_template: str = Input(
