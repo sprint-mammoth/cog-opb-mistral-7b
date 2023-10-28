@@ -10,7 +10,7 @@ import torch
 import numpy as np
 import pprint as pp
 from cog import BasePredictor, Input, Path, BaseModel, ConcatenateIterator
-from llama_cpp import LlamaGrammar, Llama
+from llama_cpp import Llama
 
 
 MODEL_ID = "sprint-mammoth/openbuddy-mistral-7b-v13.1-GGUF"
