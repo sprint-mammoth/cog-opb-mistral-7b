@@ -1,0 +1,47 @@
+# Configuration for Cog ⚙️
+# Reference: https://github.com/replicate/cog/blob/main/docs/yaml.md
+
+build:
+  # set to true if your model requires a GPU
+  cuda: "11.7"
+  gpu: true
+
+  # a list of ubuntu apt packages to install
+  # system_packages:
+    # - "libgl1-mesa-glx"
+    # - "libglib2.0-0"
+    # - "wget"
+    - "cmake"
+    - "g++"
+    - "build-essential"
+
+  # python version in the form '3.8' or '3.8.12'
+  python_version: "3.10"
+
+  # a list of packages in the format <package-name>==<version>
+  python_packages:
+    # - torch==2.0.1
+    # - torchvision==0.15.2
+    - einops
+    - "numpy==1.24.4"
+    - "sentencepiece==0.1.98"
+    - gguf
+
+  
+  # commands run after the environment is setup
+  # Requires: CUBLAS for cuda GPU accelerate
+  run:
+    # - pip install auto-gptq --extra-index-url https://huggingface.github.io/autogptq-index/whl/cu117/
+    # - CUDA_HOME=/usr/local/cuda pip install git+https://github.com/vllm-project/vllm.git@main
+    #- "git clone https://github.com/ggerganov/llama.cpp.git"
+    #- "make -C llama.cpp"
+    - "CMAKE_ARGS='-DLLAMA_CUBLAS=on' FORCE_CMAKE=1 pip install llama-cpp-python --no-cache-dir"
+    #- "pip install llama-cpp-python"
+    - "mkdir -p models"
+    # - "wget -q https://huggingface.co/TheBloke/Llama-2-13B-GGUF/resolve/main/llama-2-13b.Q5_K_S.gguf -O models/llama-2-13b.Q5_K_S.gguf"
+    - "wget https://huggingface.co/sprint-mammoth/openbuddy-mistral-7b-v13.1-GGUF/resolve/main/openbuddy-mistral-7b-v13.1-Q4_K_M.gguf -O models/openbuddy-mistral-7b-v13.1-Q4_K_M.gguf"
+
+predict: "predict.py:Predictor"
+
+# predict.py defines how predictions are run on your model
+predict: "predict.py:Predictor"
