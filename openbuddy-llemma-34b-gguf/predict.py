@@ -81,6 +81,14 @@ class Predictor(BasePredictor):
             le=5,
             default=DEFAULT_REPETITION_PENALTY,
         ),
+        presence_penalty: float = Input(
+            description="Presence penalty, ",
+            default=DEFAULT_PRESENCE_PENALTY,
+        ),
+        frequency_penalty: float = Input(
+            description="Frequency penalty",
+            default=DEFAULT_FREQUENCY_PENALTY,
+        ),
         prompt_template: str = Input(
             description="The template used to format the prompt. The input prompt is inserted into the template using the `{prompt}` placeholder.",
             default=PROMPT_TEMPLATE,
@@ -103,35 +111,38 @@ class Predictor(BasePredictor):
         print(f"Your formatted prompt is: \n{instruct_prompt}")
 
         n_tokens = 0
-        start = time.time()
+        output = ""
+        start = time.perf_counter()
 
-        response = self.llm(
+        for tok in self.llm(
             instruct_prompt,
             max_tokens=max_new_tokens,
-        )
-        endtime = time.time()
-        duration = endtime - start
-        print(f"\nGenerated in {duration} seconds.")
-
-        output = response["choices"][0]["text"]
-        output = json.dumps(json.loads(output), indent=2)
-        print(f"Final output:{output}")
-
-        return output
-        
-        
-        generated_text = ""
-        for new_text in self.text_streamer:
-            n_tokens += 1
-            if new_text == "":
+            stream=True,
+            temperature=temperature,
+            top_p=top_p,
+            top_k=top_k,
+            frequency_penalty=frequency_penalty,
+            presence_penalty=presence_penalty,
+            repeat_penalty=repetition_penalty,
+            # mirostat_mode={"Disabled": 0, "Mirostat": 1, "Mirostat 2.0": 2}[mirostat_mode],
+            # mirostat_eta=mirostat_learning_rate,
+            # mirostat_tau=mirostat_entropy,
+        ):
+            text = tok["choices"][0]["text"]
+            if text == "":
                 continue
-            yield new_text
+            yield text
+            n_tokens += 1
             if n_tokens == 1 and debug:
-                second_start = time.time()
+                second_start = time.perf_counter()
                 print(f"after initialization, first token took {second_start - start:.3f}")
             if debug:
-                print(new_text) # for debug
-            generated_text += new_text
+                print(text)
+            output += text
+        endtime = time.perf_counter()
+        duration = endtime - start
+        print(f"Final output:{output}")
+        print(f"\nGenerated in {duration} seconds.")
 
         if debug:
             print(f"Tokens per second: {n_tokens / duration:.2f}")
@@ -139,4 +150,21 @@ class Predictor(BasePredictor):
             print(f"cur memory: {torch.cuda.memory_allocated()}")
             print(f"max allocated: {torch.cuda.max_memory_allocated()}")
             print(f"peak memory: {torch.cuda.max_memory_reserved()}")
+
+        '''response = self.llm(
+            instruct_prompt,
+            max_tokens=max_new_tokens,
+        )
+        endtime = time.perf_counter()
+        duration = endtime - start
+        print(f"\nGenerated in {duration} seconds.")
+
+        output = response["choices"][0]["text"]
+        output = json.dumps(json.loads(output), indent=2)
+        print(f"Final output:{output}")
+
+        return output'''
+        
+
+        
     
