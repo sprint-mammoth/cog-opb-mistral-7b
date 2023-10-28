@@ -151,6 +151,8 @@ class Predictor(BasePredictor):
         generated_text = ""
         for new_text in self.text_streamer:
             n_tokens += 1
+            if new_text == "":
+                continue
             yield new_text
             if n_tokens == 1 and debug:
                 second_start = time.time()
