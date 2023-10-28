@@ -26,7 +26,8 @@ build:
     - "numpy==1.24.4"
     - "sentencepiece==0.1.98"
     - gguf
-
+    - huggingface_hub
+    - hf-transfer
   
   # commands run after the environment is setup
   # Requires: CUBLAS for cuda GPU accelerate

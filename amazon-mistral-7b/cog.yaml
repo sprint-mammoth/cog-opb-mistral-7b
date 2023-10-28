@@ -23,7 +23,7 @@ build:
     #- accelerate
     #- optimum
     - safetensors
-    #- huggingface-hub 
+    - huggingface_hub 
     - hf-transfer
   
   # commands run after the environment is setup
