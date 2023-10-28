@@ -1,0 +1,28 @@
+#!/usr/bin/env python
+
+import os
+import shutil
+import subprocess
+
+CACHE_DIR = "checkpoints"
+MODEL_ID = "amazon/MistralLite"
+
+if os.path.exists(CACHE_DIR):
+    shutil.rmtree(CACHE_DIR)
+
+os.makedirs(CACHE_DIR)
+
+# Running system commands
+# subprocess.run(['mkdir', 'openbuddy'], check=True)
+# subprocess.run(['ls', '-l'], check=True)
+os.environ['HF_HUB_ENABLE_HF_TRANSFER'] = '1'
+subprocess.run(['huggingface-cli', 'download', MODEL_ID, '--local-dir', CACHE_DIR, '--local-dir-use-symlinks', 'False'], check=True)
+
+'''
+    - mkdir checkpoints
+    - ls -l
+    - export HF_HUB_ENABLE_HF_TRANSFER=1
+    - echo $HF_HUB_ENABLE_HF_TRANSFER
+    - huggingface-cli download TheBloke/openbuddy-mistral-7B-v13-GPTQ --local-dir openbuddy --local-dir-use-symlinks False
+    # HF_HUB_ENABLE_HF_TRANSFER=1 huggingface-cli download $MODEL_ID --local-dir $CACHE_DIR --local-dir-use-symlinks False
+'''
