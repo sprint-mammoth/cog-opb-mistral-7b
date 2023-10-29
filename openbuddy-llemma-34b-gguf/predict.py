@@ -2,18 +2,17 @@
 
 import os
 import time
-import json
+# import json
 
 os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1"
 
 import torch
-import numpy as np
-import pprint as pp
-from cog import BasePredictor, Input, Path, BaseModel, ConcatenateIterator
+# import pprint as pp
+from cog import BasePredictor, Input, ConcatenateIterator
 from llama_cpp import Llama
 
 
-MODEL_ID = "sprint-mammoth/openbuddy-mistral-7b-v13.1-GGUF"
+MODEL_ID = "sprint-mammoth/openbuddy-llemma-34b-v13.1-GGUF"
 CACHE_DIR = "checkpoints"
 
 PROMPT_TEMPLATE = '''You are a helpful high school Math tutor. If you don't know the answer to a question, please don't share false information. You can speak fluently in many languages.
@@ -36,9 +35,14 @@ DEFAULT_REPETITION_PENALTY = 1.1  # 1.0
 class Predictor(BasePredictor):
 
     def setup(self):
-        model_path = "/models/openbuddy-mistral-7b-v13.1-Q4_K_M.gguf"
+        model_path = "/models/openbuddy-llemma-34b-v13.1-Q4_K_M.gguf"
         self.llm = Llama(
-            model_path, n_ctx=4096, n_gpu_layers=-1, main_gpu=0, n_threads=1
+            model_path,
+            n_gpu_layers=-1,
+            main_gpu=0,
+            n_ctx=4096,
+            n_threads=1,
+            verbose = True,
         )
 
     def predict(
@@ -110,9 +114,15 @@ class Predictor(BasePredictor):
         instruct_prompt = prompt_template.format(prompt=prompt)
         print(f"Your formatted prompt is: \n{instruct_prompt}")
 
+        if stop_sequences:
+            stop_sequences = stop_sequences.split(",")
+        else:
+            stop_sequences = ["</s>", "Assistant:"]
+
         n_tokens = 0
         output = ""
         start = time.perf_counter()
+        print("Inference starting...")
 
         for tok in self.llm(
             instruct_prompt,
@@ -124,6 +134,7 @@ class Predictor(BasePredictor):
             frequency_penalty=frequency_penalty,
             presence_penalty=presence_penalty,
             repeat_penalty=repetition_penalty,
+            stop=stop_sequences,
             # mirostat_mode={"Disabled": 0, "Mirostat": 1, "Mirostat 2.0": 2}[mirostat_mode],
             # mirostat_eta=mirostat_learning_rate,
             # mirostat_tau=mirostat_entropy,
@@ -137,7 +148,7 @@ class Predictor(BasePredictor):
                 second_start = time.perf_counter()
                 print(f"after initialization, first token took {second_start - start:.3f}")
             if debug:
-                print(text)
+                print(f"{n_tokens}:{text}")
             output += text
         endtime = time.perf_counter()
         duration = endtime - start
@@ -154,13 +165,21 @@ class Predictor(BasePredictor):
         '''response = self.llm(
             instruct_prompt,
             max_tokens=max_new_tokens,
+            temperature=temperature,
+            top_p=top_p,
+            top_k=top_k,
+            frequency_penalty=frequency_penalty,
+            presence_penalty=presence_penalty,
+            repeat_penalty=repetition_penalty,
+            stop=stop_sequences,
         )
         endtime = time.perf_counter()
         duration = endtime - start
         print(f"\nGenerated in {duration} seconds.")
 
+        response = json.dumps(json.loads(response), indent=2)
+        print(f"Final output:{response}")
         output = response["choices"][0]["text"]
-        output = json.dumps(json.loads(output), indent=2)
         print(f"Final output:{output}")
 
         return output'''
