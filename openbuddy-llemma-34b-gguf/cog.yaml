@@ -7,7 +7,7 @@ build:
   gpu: true
 
   # a list of ubuntu apt packages to install
-  # system_packages:
+  system_packages:
     # - "libgl1-mesa-glx"
     # - "libglib2.0-0"
     # - "wget"
